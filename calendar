@@ -1,0 +1,78 @@
+#include <iostream>
+#include <stdlib.h>
+#include <stdio.h>
+using namespace std;
+
+
+
+int rok_przestepny(int r)
+{
+	return (r % 400 == 0 || (r % 4 == 0 && r % 100 != 0));
+}
+
+
+int main()
+{
+	int  r, m, d, g, min, s;
+	int iprzestepnych = 0;
+	long long int ile_s_koniec;
+	long long int mies_na_s = 0, ile_s = 0;
+	int dni_mies[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+	int  r2, m2, d2, g2, min2, s2;
+	long long int mies_na_s2 = 0, ile_s2 = 0;
+	long long int ile_s_koniec2;
+	long long int r3;//ile lat roznicy
+	long long int n;//ile razy
+
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		cin >> r >> m >> d >> g >> min >> s;
+		cin >> r2 >> m2 >> d2 >> g2 >> min2 >> s2;
+		if (rok_przestepny(r)) dni_mies[1] = 29;
+		for (int i = 0; i < m - 1; i++) {
+			mies_na_s = mies_na_s + dni_mies[i]; // ile jest dni łącznie w tych miesiącach
+		}
+		mies_na_s = mies_na_s * 24 * 60 * 60; // ile jest w nich sekund
+		ile_s = mies_na_s + (d - 1) * 24 * 60 * 60 + g * 60 * 60 + min * 60 + s; //ile minęło od początku roku do tej daty
+		if (rok_przestepny(r)) { //ile sekund ma cały rok
+			ile_s_koniec = 31622400;
+		}
+		else {
+			ile_s_koniec = 31536000;
+		}
+		ile_s = ile_s_koniec - ile_s;//ile sekund do końca roku
+		dni_mies[1] = 28;
+
+		if (rok_przestepny(r2)) dni_mies[1] = 29;
+		for (int i = 0; i < m2 - 1; i++) {
+			mies_na_s2 = mies_na_s2 + dni_mies[i]; // ile jest dni łącznie w tych miesiącach
+		}
+		mies_na_s2 = mies_na_s2 * 24 * 60 * 60; // ile jest w nich sekund
+		ile_s2 = mies_na_s2 + (d2 - 1) * 24 * 60 * 60 + g2 * 60 * 60 + min2 * 60 + s2; //ile minęło od początku roku do tej daty
+		if (rok_przestepny(r2)) { //ile sekund ma cały rok (1. data)
+			ile_s_koniec = 31622400;
+		}
+		else {
+			ile_s_koniec = 31536000;
+		}
+		ile_s2 = ile_s2 - ile_s_koniec;//ile sekund do końca roku
+		dni_mies[1] = 28;
+
+		r3 = r2 - r;
+		for (int n = r + 1; n <= r2; n++) { //ile przestepnych miedzy r i r2
+			if (rok_przestepny(n)) {
+				iprzestepnych++;
+			}
+		}
+		if (r3 != 0) {
+			r3 = r3 * 365 * 24 * 60 * 60 + iprzestepnych * 24 * 60 * 60;
+		}
+		r3 = r3 + ile_s2 + ile_s;
+		r3 = r3 / (60 * 60 * 24);
+		cout << r3 << endl;
+
+		r3 = 0, r = 0, r2 = 0, m = 0, m2 = 0, d = 0, d2 = 0, g = 0, g2 = 0;
+		min = 0, min2 = 0, s = 0, s2 = 0, ile_s = 0, ile_s2 = 0, mies_na_s = 0, mies_na_s2 = 0, iprzestepnych = 0;
+	}
+	return 0;
+}
